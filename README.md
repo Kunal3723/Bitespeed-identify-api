@@ -325,8 +325,3 @@ MIT License - see LICENSE file for details
 
 For questions or issues, please open a GitHub issue or contact the development team.
 
----
-
-**Built with ❤️ for Bitespeed**
-
-*Last updated: December 2023*
