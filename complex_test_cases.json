@@ -1,0 +1,105 @@
+[
+    {
+      "description": "Chain Linking Chaos (email-phone alternation)",
+      "requests": [
+        { "email": "a@time.com", "phoneNumber": "111" },
+        { "email": "b@time.com", "phoneNumber": "111" },
+        { "email": "b@time.com", "phoneNumber": "222" },
+        { "email": "c@time.com", "phoneNumber": "222" },
+        { "email": "c@time.com", "phoneNumber": "333" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["a@time.com", "b@time.com", "c@time.com"],
+          "phoneNumbers": ["111", "222", "333"],
+          "secondaryContactIds": ["ALL_SECONDARIES"]
+        }
+      }
+    },
+    {
+      "description": "Multiple Primaries Need Merging",
+      "requests": [
+        { "email": "george@hillvalley.edu", "phoneNumber": "919191" },
+        { "email": "biffsucks@hillvalley.edu", "phoneNumber": "717171" },
+        { "email": "george@hillvalley.edu", "phoneNumber": "717171" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["george@hillvalley.edu", "biffsucks@hillvalley.edu"],
+          "phoneNumbers": ["919191", "717171"],
+          "secondaryContactIds": ["SECONDARY_IDS"]
+        }
+      }
+    },
+    {
+      "description": "Partial Overlaps Across Years",
+      "requests": [
+        { "email": "doc@brown.com", "phoneNumber": "123" },
+        { "email": "emmett@brown.com", "phoneNumber": null },
+        { "email": null, "phoneNumber": "456" },
+        { "email": "emmett@brown.com", "phoneNumber": "456" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["doc@brown.com", "emmett@brown.com"],
+          "phoneNumbers": ["123", "456"],
+          "secondaryContactIds": ["SECONDARY_IDS"]
+        }
+      }
+    },
+    {
+      "description": "Deleted Contacts Re-linked",
+      "requests": [
+        { "email": "clara@hillvalley.com", "phoneNumber": "999999" },
+        { "email": "claraalt@hillvalley.com", "phoneNumber": "999999" },
+        { "email": "claraalt@hillvalley.com", "phoneNumber": "999999" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["clara@hillvalley.com", "claraalt@hillvalley.com"],
+          "phoneNumbers": ["999999"],
+          "secondaryContactIds": ["SECONDARY_IDS"]
+        }
+      }
+    },
+    {
+      "description": "Big Merge (5 emails, 5 phones)",
+      "requests": [
+        { "email": "a@hillvalley.com", "phoneNumber": "111" },
+        { "email": "b@hillvalley.com", "phoneNumber": "111" },
+        { "email": "b@hillvalley.com", "phoneNumber": "222" },
+        { "email": "c@hillvalley.com", "phoneNumber": "333" },
+        { "email": "d@hillvalley.com", "phoneNumber": "444" },
+        { "email": "e@hillvalley.com", "phoneNumber": "555" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["a@hillvalley.com", "b@hillvalley.com", "c@hillvalley.com", "d@hillvalley.com", "e@hillvalley.com"],
+          "phoneNumbers": ["111", "222", "333", "444", "555"],
+          "secondaryContactIds": ["SECONDARY_IDS"]
+        }
+      }
+    },
+    {
+      "description": "Cross-Link Between Two Customers (family/office shared info)",
+      "requests": [
+        { "email": "father@hillvalley.com", "phoneNumber": "123123" },
+        { "email": "son@hillvalley.com", "phoneNumber": "456456" },
+        { "email": "son@hillvalley.com", "phoneNumber": "123123" }
+      ],
+      "expectedFinalResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["father@hillvalley.com", "son@hillvalley.com"],
+          "phoneNumbers": ["123123", "456456"],
+          "secondaryContactIds": ["SECONDARY_IDS"]
+        }
+      }
+    }
+  ]
+  

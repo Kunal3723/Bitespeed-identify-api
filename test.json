@@ -1,0 +1,108 @@
+[
+    {
+      "description": "New user with only email",
+      "request": {
+        "email": "docbrown@hillvalley.com",
+        "phoneNumber": null
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "NEW_ID", 
+          "emails": ["docbrown@hillvalley.com"],
+          "phoneNumbers": [],
+          "secondaryContactIds": []
+        }
+      }
+    },
+    {
+      "description": "New user with only phone number",
+      "request": {
+        "email": null,
+        "phoneNumber": "555123"
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "NEW_ID",
+          "emails": [],
+          "phoneNumbers": ["555123"],
+          "secondaryContactIds": []
+        }
+      }
+    },
+    {
+      "description": "Second order with same phone but new email (should create secondary)",
+      "request": {
+        "email": "marty@hillvalley.com",
+        "phoneNumber": "555123"
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "ID_OF_FIRST_PHONE_555123",
+          "emails": ["PRIMARY_EMAIL_IF_ANY", "marty@hillvalley.com"],
+          "phoneNumbers": ["555123"],
+          "secondaryContactIds": ["NEW_ID_SECONDARY"]
+        }
+      }
+    },
+    {
+      "description": "Overlapping chain: link email of one contact to phone of another",
+      "request": {
+        "email": "george@hillvalley.edu",
+        "phoneNumber": "717171"
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID", 
+          "emails": ["george@hillvalley.edu","biffsucks@hillvalley.edu"],
+          "phoneNumbers": ["919191","717171"],
+          "secondaryContactIds": ["ID_OF_SECONDARY"]
+        }
+      }
+    },
+    {
+      "description": "Multiple merges — same person uses 3 different emails and 2 different phones",
+      "request": {
+        "email": "futureboy@hillvalley.com",
+        "phoneNumber": "999888"
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "OLDEST_ID",
+          "emails": ["first_used_email","second_used_email","futureboy@hillvalley.com"],
+          "phoneNumbers": ["first_used_phone","second_used_phone","999888"],
+          "secondaryContactIds": ["ALL_SECONDARIES"]
+        }
+      }
+    },
+    {
+      "description": "Request with only phone that matches an existing secondary (should still return primary cluster)",
+      "request": {
+        "email": null,
+        "phoneNumber": "717171"
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "PRIMARY_OF_CLUSTER",
+          "emails": ["all_emails_in_cluster"],
+          "phoneNumbers": ["all_phones_in_cluster"],
+          "secondaryContactIds": ["all_secondary_ids"]
+        }
+      }
+    },
+    {
+      "description": "Request with only email that matches an existing secondary",
+      "request": {
+        "email": "biffsucks@hillvalley.edu",
+        "phoneNumber": null
+      },
+      "expectedResponse": {
+        "contact": {
+          "primaryContatctId": "PRIMARY_OF_CLUSTER",
+          "emails": ["all_emails_in_cluster"],
+          "phoneNumbers": ["all_phones_in_cluster"],
+          "secondaryContactIds": ["all_secondary_ids"]
+        }
+      }
+    }
+  ]
+  
