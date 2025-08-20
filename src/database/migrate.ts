@@ -54,11 +54,10 @@ export const runMigrations = async (): Promise<void> => {
   } catch (error) {
     console.error('Migration failed:', error);
     throw error;
-  } finally {
-    await pool.end();
   }
 };
 
+// Don't end the pool here - let the main app manage it
 if (require.main === module) {
-  runMigrations().catch(console.error);
+  runMigrations().then(() => process.exit(0)).catch(() => process.exit(1));
 }

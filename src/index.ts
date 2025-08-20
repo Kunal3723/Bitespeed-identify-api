@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { testConnection } from './database/connection';
+import { runMigrations } from './database/migrate';
 import contactRoutes from './routes/contactRoutes';
 
 dotenv.config();
@@ -45,6 +46,9 @@ const startServer = async () => {
   try {
     // Test database connection
     await testConnection();
+    
+    // Run database migrations to ensure tables exist
+    await runMigrations();
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

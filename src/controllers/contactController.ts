@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ContactService } from '../services/contactService';
 import { ContactRequest } from '../types/contact';
+import { pool } from '../database/connection';
 
 export class ContactController {
   private contactService: ContactService;
@@ -40,10 +41,36 @@ export class ContactController {
    * Health check endpoint
    */
   async healthCheck(req: Request, res: Response): Promise<void> {
-    res.status(200).json({
-      status: 'OK',
-      timestamp: new Date().toISOString(),
-      service: 'Bitespeed Contact Identifier'
-    });
+    try {
+      // Check if database table exists
+      const tableCheck = await pool.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.tables 
+          WHERE table_name = 'contacts'
+        );
+      `);
+      
+      const tableExists = tableCheck.rows[0].exists;
+      
+      res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        service: 'Bitespeed Contact Identifier',
+        database: {
+          connected: true,
+          tableExists: tableExists
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'ERROR',
+        timestamp: new Date().toISOString(),
+        service: 'Bitespeed Contact Identifier',
+        database: {
+          connected: false,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        }
+      });
+    }
   }
 }

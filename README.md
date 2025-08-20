@@ -302,6 +302,8 @@ bit-project/
 2. Set environment variables
 3. Deploy automatically on push
 
+**📖 For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)**
+
 ### Other Platforms
 The Docker setup makes it easy to deploy to any platform that supports Docker:
 - AWS ECS
